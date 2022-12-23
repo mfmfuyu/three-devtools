@@ -273,7 +273,6 @@ return class EntityCache extends EventTarget {
 
     try {
       //console.time('toJSON-'+entity.uuid);
-      console.log(entity, meta)
       json = entity.toJSON(meta);
       //console.timeEnd('toJSON-'+entity.uuid);
     } catch (e) {
