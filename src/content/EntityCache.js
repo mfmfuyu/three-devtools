@@ -10,7 +10,7 @@ return class EntityCache extends EventTarget {
 
     this.entityMap = new Map();
     // Map of uuid to version, if any, of a large
-    // value stored in resources, like images and buffers. 
+    // value stored in resources, like images and buffers.
     this.resourcesSent = new Map();
 
     this.resources = {
@@ -32,8 +32,8 @@ return class EntityCache extends EventTarget {
   /**
    * Adds a renderer or scene to be registered and observed
    * to iterate over in the future when looking for resources.
-   * 
-   * @param {THREE.Scene | THREE.WebGLRenderer} entity 
+   *
+   * @param {THREE.Scene | THREE.WebGLRenderer} entity
    * @return {String} returns the ID of the entity if and only if it was added.
    */
   add(entity) {
@@ -49,7 +49,7 @@ return class EntityCache extends EventTarget {
     }
 
     if (entity.isScene) {
-      this.scenes.add(entity); 
+      this.scenes.add(entity);
       this._registerEntity(entity);
     } else if (typeof entity.render === 'function') {
       this.entityMap.set(id, entity);
@@ -75,7 +75,7 @@ return class EntityCache extends EventTarget {
         baseType: utils.getBaseType(object),
         children: [],
       };
- 
+
       if (object.parent) {
         graph[object.parent.uuid].children.push(object.uuid);
       }
@@ -91,7 +91,7 @@ return class EntityCache extends EventTarget {
   /**
    * Returns the associated resources that have
    * already been discovered of corresponding type.
-   * 
+   *
    * @param {String} type can be "scenes", "geometries", "materials", "textures"
    */
   getOverview(type) {
@@ -184,6 +184,7 @@ return class EntityCache extends EventTarget {
       devtoolsConfig: {
         serializeChildren: !entity.isObject3D,
       },
+      skeletons: []
     }
 
     // Register all dependencies, as they may not have
@@ -254,7 +255,7 @@ return class EntityCache extends EventTarget {
 
     if (!entity[PATCHED]) {
       // via `src/content/toJSON.js`
-      entity.toJSON = InstrumentedToJSON; 
+      entity.toJSON = InstrumentedToJSON;
       entity[PATCHED] = true;
     }
   }
@@ -262,7 +263,7 @@ return class EntityCache extends EventTarget {
   /**
    * This turns a Three entity into something serializable.
    * Mostly the built-in 'toJSON()' method with cached metadata.
-   * 
+   *
    * @param {*} entity
    * @param {Object} options
    * @param {Boolean} options.serializeChildren [true]
@@ -272,6 +273,7 @@ return class EntityCache extends EventTarget {
 
     try {
       //console.time('toJSON-'+entity.uuid);
+      console.log(entity, meta)
       json = entity.toJSON(meta);
       //console.timeEnd('toJSON-'+entity.uuid);
     } catch (e) {
@@ -279,8 +281,8 @@ return class EntityCache extends EventTarget {
       // @TODO handle this, throw it for now.
       console.error(`${entity.uuid} does not appear to be serializable.`, e);
     }
-    
-    return json && json.object ? json.object : json; 
+
+    return json && json.object ? json.object : json;
   }
 
   /**
