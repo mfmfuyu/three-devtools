@@ -52,11 +52,11 @@ function propsToElements(entity, elements, props, entities) {
         continue;
       }
     }
-    
+
     if (prop.type === 'group') {
       const subProps = [];
       propsToElements(entity, subProps, [...prop.props]);
-      elements.push(html`<accordion-view>
+      elements.push(html`<accordion-view open="true">
         <div class="accordion-title" slot="content">${prop.name}</div>
         ${subProps}
       </accordion-view>`);
@@ -75,7 +75,7 @@ function propsToElements(entity, elements, props, entities) {
       let step = 'step' in prop ? prop.step :
                  type === 'int' ? 1 : 0.01;
       let precision = 'precision' in prop ? prop.precision :
-                      type === 'int' ? 0 : 3; 
+                      type === 'int' ? 0 : 3;
 
       // For object types (geometry, material, texture)
       let associatedData = {};
@@ -190,7 +190,7 @@ export default class ParametersViewElement extends LitElement {
   <devtools-icon-button icon="refresh" class="${!this.entity ? 'hide' : ''}" @click="${this[$onRefresh]}">
 </title-bar>
 <div class="properties">
-  ${elements} 
+  ${elements}
 </div>
 `;
   }
